@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/peterlee0127/Translator#readme",
   "dependencies": {
+    "gengo": "^1.0.3",
     "koa": "^2.7.0",
     "koa-ejs": "^4.2.0",
     "koa-static": "^5.0.0"
