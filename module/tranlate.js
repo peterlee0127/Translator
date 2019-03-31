@@ -50,7 +50,7 @@ exports.createJob = createJob;
 
 function getJobList(job_query) {
     return new Promise( (resolve, reject) => {
-        gengo.jobs.list({status: 'approved' }, (error, response) => {
+        gengo.jobs.list(job_query, (error, response) => {
             if(error){ reject(error);}
             else{
                 resolve(response);
@@ -69,7 +69,7 @@ async function listJobs() {
         getJobList({ status: 'pending' }),
         getJobList({ status: 'available' })
     ])  
-    return results[0];
+    return results;
 }
 listJobs();
 

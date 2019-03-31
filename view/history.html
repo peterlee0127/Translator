@@ -1,15 +1,20 @@
 <main role="main">
     <div class="card">
-        <h5 class="card-header">Job History</h5>
+        <% let header = ["approved","pending","available"] %>
         <% for(var i=0; i<data.length; i++) {%>
+        <h5 class="card-header"><%= header[i] %></h5>
         <div class="card-body">
-          <% let date = data[i].ctime*1000 %>
-          <p class="card-text">Time: <%= new Date(date).toString().split("GMT")[0] %>  Job ID: <%= data[i].job_id %></p>
-          <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
+           <% let category = data[i]%>
+           <% for(var j=0; j<category.length; j++) {%>
+           <% let date = category[j].ctime*1000 %>
+          <p class="card-text">Time: <%= new Date(date).toString().split("GMT")[0] %>  Job ID: <%= category[j].job_id %>
             <a href="#" id='<%= data[i].job_id %>' class="btn btn-success">Info</a>
+          </p>
+          <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
           </form>
-        </div>
-        <hr>
+  
+        <% } %>
+      </div>
         <% } %>
      </div>
 </main>
