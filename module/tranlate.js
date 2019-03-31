@@ -48,13 +48,9 @@ function createJob(content) {
 }
 exports.createJob = createJob;
 
-async function listJobs() {
+function getJobList(job_query) {
     return new Promise( (resolve, reject) => {
-        //queued,available,approved,reviewable,pending,revising,canceled
-        // { status: 'approved' }
-        // {status: 'pending' }
-        // {status: 'available' } 
-        gengo.jobs.list({status: 'available' }, (error, response) => {
+        gengo.jobs.list({status: 'approved' }, (error, response) => {
             if(error){ reject(error);}
             else{
                 resolve(response);
@@ -62,5 +58,19 @@ async function listJobs() {
         });
     });
 }
+
+async function listJobs() {
+    //queued,available,approved,reviewable,pending,revising,canceled
+    // { status: 'approved' }
+    // {status: 'pending' }
+    // {status: 'available' }
+    let results = await Promise.all([
+        getJobList({ status: 'approved' }),
+        getJobList({ status: 'pending' }),
+        getJobList({ status: 'available' })
+    ])  
+    return results[0];
+}
+listJobs();
 
 exports.listJobs = listJobs;
