@@ -11,27 +11,33 @@ gengo.account.stats(function(error,response){
     // console.log(response);
 });
 
+function getJob(jobId) {
+    gengo.job.get(jobId, (error, response)=> {
+        if(error){console.log(error)}
+        else {
+            console.log(response);
+        }
 
-let job1 = {
-    'slug': 'job test',
-    'body_src': 'one two three four',
-    'lc_src': 'zh',
-    'lc_tgt': 'en',
-    'tier': 'standard',
-    'auto_approve': 1,
-    'custom_data': 'some custom data untouched by Gengo.',
-};
-let jobs = {
-    "jobs": {
-        'job_1': job1,
-        'job_2': job1
-    }
+    });
 }
-// console.dir(jobs,{depth:null});
+exports.getJob = getJob;
+// getJob('2979472')
 
-// createJob(jobs)
-
-function createJob(job) {
+function createJob(content) {
+    let job1 = {
+        'slug': content,
+        'body_src': content,
+        'lc_src': 'zh',
+        'lc_tgt': 'en',
+        'tier': 'standard',
+        'auto_approve': 1,
+        'custom_data': 'some custom data untouched by Gengo.',
+    };
+    let jobs = {
+        "jobs": {
+            'job1': job1,
+        }
+    }
     gengo.jobs.create(jobs, (error,response)=> {
         if(error)  {
             console.log(error);
@@ -40,10 +46,15 @@ function createJob(job) {
         }
     });
 }
+exports.createJob = createJob;
 
 async function listJobs() {
     return new Promise( (resolve, reject) => {
-        gengo.jobs.list({ status: 'approved' }, (error, response) => {
+        //queued,available,approved,reviewable,pending,revising,canceled
+        // { status: 'approved' }
+        // {status: 'pending' }
+        // {status: 'available' } 
+        gengo.jobs.list({status: 'available' }, (error, response) => {
             if(error){ reject(error);}
             else{
                 resolve(response);

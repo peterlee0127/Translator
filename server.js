@@ -1,7 +1,10 @@
 const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
 const render = require('koa-ejs');
 const path = require('path');
 const app = new Koa();
+
+app.use(bodyParser());
 app.use(require('koa-static')('public', {}));
 
 const translate = require('./module/tranlate.js');
@@ -19,7 +22,21 @@ app.use(async function (ctx) {
   if(ctx.path=="/history") {
     let jobs = await translate.listJobs();
     await ctx.render('history', { data: jobs });
+  }
+  else if(ctx.path == "/create_job")  {
+    let content = ctx.request.body.content;
+    translate.createJob(content);
+    ctx.redirect('/')
+  }
+  else if(ctx.path == "/get_job")  {
+    let query = ctx.request.query;
+    console.log(query);
+    let jobid = query.jobId;
+    let jobInfo = await translate.getJob(content);
+    console.log(jobInfo)
   }else {
+    //createJob
+    // translate.createJob();
     await ctx.render('index', { users }); 
   }
 });

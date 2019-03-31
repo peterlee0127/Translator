@@ -1,9 +1,7 @@
 <main role="main" class="inner cover">
     <h1 class="cover-heading">Translator</h1>
-    <div class="form-group">
-        <form>
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea><br>
-              <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
+    <textarea class="form-control" name="content" form="textForm" rows="20" value="漢語，又稱中文、華文、唐話，或被視為漢語族，或被視為漢藏語系漢語族下之唯一語言。 作為語言而言，為世界使用人數最多的語言，目前世界有五分之一人口做為母語。漢語有多種分支，當中官話最為流行，為中華人民共和國的國家通用語言、以及中華民國的國語。此外，中文還是聯合國正式語文，並被上海合作組織等國際組織採用為官方語言。"></textarea><br>
+    <form action="create_job" method="POST" id="textForm" role="form">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </main>

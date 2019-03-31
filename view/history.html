@@ -4,9 +4,10 @@
         <% for(var i=0; i<data.length; i++) {%>
         <div class="card-body">
           <% let date = data[i].ctime*1000 %>
-          <p class="card-text">Time: <%= new Date(date).toLocaleDateString("zh-TW") %>  Job ID: <%= data[i].job_id %></p>
-          <a href="#" class="btn btn-primary">Source</a>
-          <a href="#" class="btn btn-primary">Result</a>
+          <p class="card-text">Time: <%= new Date(date).toString().split("GMT")[0] %>  Job ID: <%= data[i].job_id %></p>
+          <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
+            <a href="#" id='<%= data[i].job_id %>' class="btn btn-success">Info</a>
+          </form>
         </div>
         <hr>
         <% } %>
