@@ -4,18 +4,16 @@ const gengo = require('gengo')(config.publicKey, config.privateKey, config.sandb
 
 
 
-
-
 gengo.account.stats(function(error,response){
     if(error)  {
         console.log(error);
     }
-    console.log(response);
+    // console.log(response);
 });
 
 
 let job1 = {
-    'slug': 'job test 1',
+    'slug': 'job test',
     'body_src': 'one two three four',
     'lc_src': 'zh',
     'lc_tgt': 'en',
@@ -25,14 +23,33 @@ let job1 = {
 };
 let jobs = {
     "jobs": {
-        'job_1': job1
+        'job_1': job1,
+        'job_2': job1
     }
 }
-console.dir(jobs,{depth:null});
-gengo.jobs.create(jobs, (error,response)=> {
-    if(error)  {
-        console.log(error);
-    }else{
-        console.log(response);
-    }
-});
+// console.dir(jobs,{depth:null});
+
+// createJob(jobs)
+
+function createJob(job) {
+    gengo.jobs.create(jobs, (error,response)=> {
+        if(error)  {
+            console.log(error);
+        }else{
+            console.log(response);
+        }
+    });
+}
+
+async function listJobs() {
+    return new Promise( (resolve, reject) => {
+        gengo.jobs.list({ status: 'approved' }, (error, response) => {
+            if(error){ reject(error);}
+            else{
+                resolve(response);
+            }
+        });
+    });
+}
+
+exports.listJobs = listJobs;

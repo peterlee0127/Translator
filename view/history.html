@@ -1,10 +1,19 @@
-<main role="main" class="inner cover">
+<main role="main">
     <div class="card">
-        <h5 class="card-header">Featured</h5>
+        <h5 class="card-header">Job History</h5>
+        <% for(var i=0; i<data.length; i++) {%>
         <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <% let date = data[i].ctime*1000 %>
+          <p class="card-text">Time: <%= new Date(date).toLocaleDateString("zh-TW") %>  Job ID: <%= data[i].job_id %></p>
+          <a href="#" class="btn btn-primary">Source</a>
+          <a href="#" class="btn btn-primary">Result</a>
         </div>
-      </div>
+        <hr>
+        <% } %>
+     </div>
 </main>
+<style>
+body .card{
+    color: black;
+}
+</style>
