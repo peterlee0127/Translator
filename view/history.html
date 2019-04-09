@@ -1,5 +1,8 @@
-<main role="main">
-    <div class="card">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 col-sm-12">
+        <div class="card">
         <% let header = ["approved","pending","available"] %>
         <% for(var i=0; i<data.length; i++) {%>
         <h5 class="card-header"><%= header[i] %></h5>
@@ -12,12 +15,13 @@
           </p>
           <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
           </form>
-  
         <% } %>
       </div>
         <% } %>
      </div>
-</main>
+     <div class="col-lg-3"></div>
+    </div>
+</div>
 <style>
 body .card{
     color: black;
