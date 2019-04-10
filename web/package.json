@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/peterlee0127/Translator#readme",
   "dependencies": {
-    "puppeteer": "^1.14.0"
+    "gengo": "^1.0.3",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-ejs": "^4.2.0",
+    "koa-static": "^5.0.0",
+    "sqlite3": "^4.0.6"
   }
 }
