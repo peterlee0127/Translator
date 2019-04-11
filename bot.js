@@ -5,13 +5,17 @@ const options = {
   'userDataDir':"./data" // save browser data,session,cookie
 };
 
+const fs = require('fs');
+const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
+
 
 (async () => {
   try{
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
   
-
+  const account = authInfo.account;
+  const password = authInfo.password;
 
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36');
     await page.setViewport({ width: 1280, height: 800 })
@@ -33,15 +37,35 @@ const options = {
     await page.click('.btn-primary')
   }
   await page.waitForSelector('.large-details-link');
+  
+
+  let pageList = await browser.targets();    
+  // console.log("NUMBER TABS:", pageList);
+  pageList.forEach(item=> {
+    console.log(`${item._targetInfo.title} ${item._targetInfo.url}`)
+  });
+  //_targetInfo.title
+  //_targetInfo.url
 
   await page.click('.large-details-link')
+ 
   
   await page.waitForSelector('.receipt');
   await page.click('.receipt')
 
-  await page.waitForSelector('.quote-address-to');
+  pageList = await browser.targets();    
+  pageList.forEach(item=> {
+    console.log(`${item._targetInfo.title} ${item._targetInfo.url}`)
+  });
 
-  await page.type('.quote-address-to', account)
+  // await page.waitForSelector('address');
+
+  // await page.type('.address', account)
+  await page.waitFor('.area-customer');
+
+  await page.$eval('textarea[name=quote-address-to]', el => el.value = account);
+  
+  await page.type('form#quote-address-to.address.gd.quote-address-to', account);
 
   await page.waitForSelector('.btn-group');
   await page.click('.btn-group')
