@@ -7,6 +7,7 @@ const options = {
 
 const fs = require('fs');
 const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
+const logined = true;
 
 
 (async () => {
@@ -21,12 +22,15 @@ const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
     await page.setViewport({ width: 1280, height: 800 })
 
 
-  let dashboardPage = 'https://gengo.com/c/dashboard/'
-  await page.goto(dashboardPage);
+  let firstPage = 'https://gengo.com/c/dashboard/'
+  if(!logined) {
+    firstPage = 'https://gengo.com/auth/form/login/';
+  }
+
+  await page.goto(firstPage);
 
   await page.waitFor(500);
 
-  let logined = true;
 
   if(!logined){
     console.log('try login');
@@ -41,9 +45,6 @@ const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
 
   let pageList = await browser.targets();    
   // console.log("NUMBER TABS:", pageList);
-  pageList.forEach(item=> {
-    console.log(`${item._targetInfo.title} ${item._targetInfo.url}`)
-  });
   //_targetInfo.title
   //_targetInfo.url
 
@@ -58,17 +59,15 @@ const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
     console.log(`${item._targetInfo.title} ${item._targetInfo.url}`)
   });
 
-  // await page.waitForSelector('address');
-
-  // await page.type('.address', account)
   await page.waitFor('.area-customer');
 
-  await page.$eval('textarea[name=quote-address-to]', el => el.value = account);
-  
-  await page.type('form#quote-address-to.address.gd.quote-address-to', account);
+  await page.type('textarea', account, {delay: 200})
 
-  await page.waitForSelector('.btn-group');
-  await page.click('.btn-group')
+
+  // await page.type('form textarea', account);
+
+  // await page.waitForSelector('.btn-group');
+  // await page.click('.btn-group')
 
   // await browser.close();
   
