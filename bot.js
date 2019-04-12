@@ -43,34 +43,50 @@ const logined = true;
     await page.click('.btn-primary')
   }
   await page.waitForSelector('.large-details-link');
-
-  await page.click('.large-details-link')
- 
   
-  await page.waitForSelector('.receipt');
-  await page.click('.receipt',{clickCount:4})
-  
-  await page.waitFor(500);
+  let contextList = await page.evaluate(() =>{
+    let list = [];
+     document.querySelectorAll('.large-details-link').forEach( item=>{
+        let url = item.getAttribute("href");
+        list.push(url);
+     });
+     return list;
+  })
+  console.log(contextList);
 
-  pageList = await browser.pages();   
-  for(let i=0;i<pageList.length;i++) {
-    let subPage = pageList[i];
-    let SubTitle = await subPage.title();
-    let SubUrl = await subPage.url(); 
-    if(SubUrl.includes('receipt_job')){
-      await subPage.waitFor('.area-customer');
-      await subPage.evaluate(function() {
-        document.querySelector('textarea').value = ''
-      })
+  for(let i=0;i<contextList.length;i++){
+      let url = contextList[i]; 
+      // await page.click('.large-details-link')
+      await page.goto(url);
 
-      await subPage.type('textarea', account, {delay: 2})
+      await page.waitForSelector('.receipt');
+      await page.click('.receipt',{clickCount:4})
+      
+      await page.waitFor(500);
 
-      await subPage.waitFor(1000);
-      await subPage.click('#download-button')
-      await subPage.waitFor(5000);
-      await subPage.close();
-      //download-button
-    }
+      pageList = await browser.pages();   
+      for(let i=0;i<pageList.length;i++) {
+        let subPage = pageList[i];
+        let SubTitle = await subPage.title();
+        let SubUrl = await subPage.url(); 
+        if(SubUrl.includes('receipt_job')){
+          await subPage.waitFor('.area-customer');
+          await subPage.evaluate(function() {
+            document.querySelector('textarea').value = ''
+          })
+
+          await subPage.type('textarea', account, {delay: 2})
+
+          await subPage.waitFor(1000);
+          await subPage.click('#download-button')
+          await subPage.waitFor(5000);
+          await subPage.close();
+          //download-button
+        }
+
+  }
+
+
 
     // console.log(`page:${item._targetInfo.title} ${item._targetInfo.url}`)
     // let filename = item._targetInfo.title.split(':')[0];
