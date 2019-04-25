@@ -46,7 +46,7 @@ const logined = true;
   
   let contextList = await page.evaluate(() =>{
     let list = [];
-     document.querySelectorAll('.large-details-link').forEach( item=>{
+     document.querySelectorAll('.approved .large-details-link').forEach( item=>{
         let url = item.getAttribute("href");
         list.push(url);
      });
@@ -77,7 +77,6 @@ const logined = true;
 
           await subPage.type('textarea', account, {delay: 2})
 
-          await subPage.waitFor(1000);
           await subPage.click('#download-button')
           await subPage.waitFor(5000);
           await subPage.close();
@@ -85,6 +84,7 @@ const logined = true;
         }
 
   }
+  await page.goto('https://gengo.com/c/dashboard/');
 
 
 
@@ -109,7 +109,7 @@ const logined = true;
   // await page.waitForSelector('.btn-group');
   // await page.click('.btn-group')
 
-  // await browser.close();
+  await browser.close();
   
 }catch(e) {
     console.error(e);
