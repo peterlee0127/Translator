@@ -1,11 +1,11 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 const options = {
   'headless': false,  // no gui browser
   'userDataDir':"./data" // save browser data,session,cookie
 };
 
-const fs = require('fs');
 const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
 const logined = true;
 
@@ -43,7 +43,7 @@ const logined = true;
     await page.click('.btn-primary')
   }
   await page.waitForSelector('.large-details-link');
-  
+  // list all  
   let contextList = await page.evaluate(() =>{
     let list = [];
      document.querySelectorAll('.approved .large-details-link').forEach( item=>{
@@ -55,11 +55,25 @@ const logined = true;
   console.log(contextList);
 
   for(let i=0;i<contextList.length;i++){
-      let url = contextList[i]; 
+      let url = contextList[i];
+      const ids = contextList[i].split("/").slice(-2)[0];
       // await page.click('.large-details-link')
       await page.goto(url);
-
+      
       await page.waitForSelector('.receipt');
+      const originalText  = await page.evaluate( ()=>{
+            return document.querySelector('#original-text pre').innerText
+      });
+      if (!fs.existsSync(`./public/${ids}`)){
+        fs.mkdirSync(`./public/${ids}`);
+      }
+      fs.writeFileSync(`./public/${ids}/original.txt`,originalText);
+
+      const targetText = await page.evaluate( ()=>{
+        return document.querySelector('#target-text pre').innerText
+      });
+      fs.writeFileSync(`./public/${ids}/target.txt`, targetText);
+
       await page.click('.receipt',{clickCount:4})
       
       await page.waitFor(500);
@@ -76,7 +90,7 @@ const logined = true;
           })
 
           await subPage.type('textarea', account, {delay: 2})
-
+          await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
           await subPage.click('#download-button')
           await subPage.waitFor(5000);
           await subPage.close();
