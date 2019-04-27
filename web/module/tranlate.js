@@ -27,7 +27,7 @@ function createJob(content) {
     let job1 = {
         'slug': content,
         'body_src': content,
-        'lc_src': 'zh',
+        'lc_src': 'zh-TW',
         'lc_tgt': 'en',
         'tier': 'standard',
         'auto_approve': 1,
