@@ -9,14 +9,13 @@ const options = {
 const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
 const logined = true;
 
+const account = authInfo.account;
+const password = authInfo.password;
 
 (async () => {
   try{
   const browser = await puppeteer.launch(options);
   const page = await browser.newPage();
-  
-  const account = authInfo.account;
-  const password = authInfo.password;
 
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36');
   await page.setViewport({ width: 1280, height: 800 })
@@ -55,74 +54,12 @@ const logined = true;
   console.log(contextList);
 
   for(let i=0;i<contextList.length;i++){
-      let url = contextList[i];
-      const ids = contextList[i].split("/").slice(-2)[0];
-      // await page.click('.large-details-link')
-      await page.goto(url);
-      
-      await page.waitForSelector('.receipt');
-      const originalText  = await page.evaluate( ()=>{
-            return document.querySelector('#original-text pre').innerText
-      });
-      if (!fs.existsSync(`./public/${ids}`)){
-        fs.mkdirSync(`./public/${ids}`);
-      }
-      fs.writeFileSync(`./public/${ids}/original.txt`,originalText);
-
-      const targetText = await page.evaluate( ()=>{
-        return document.querySelector('#target-text pre').innerText
-      });
-      fs.writeFileSync(`./public/${ids}/target.txt`, targetText);
-
-      await page.click('.receipt',{clickCount:4})
-      
-      await page.waitFor(500);
-
-      pageList = await browser.pages();   
-      for(let i=0;i<pageList.length;i++) {
-        let subPage = pageList[i];
-        let SubTitle = await subPage.title();
-        let SubUrl = await subPage.url(); 
-        if(SubUrl.includes('receipt_job')){
-          await subPage.waitFor('.area-customer');
-          await subPage.evaluate(function() {
-            document.querySelector('textarea').value = ''
-          })
-
-          await subPage.type('textarea', account, {delay: 2})
-          await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
-          await subPage.click('#download-button')
-          await subPage.waitFor(5000);
-          await subPage.close();
-          //download-button
-        }
-
+    let url = contextList[i];
+    await handlePage(browser, page, url);
   }
+  
   await page.goto('https://gengo.com/c/dashboard/');
-
-
-
-    // console.log(`page:${item._targetInfo.title} ${item._targetInfo.url}`)
-    // let filename = item._targetInfo.title.split(':')[0];
-
-    // bro = item.browser();
-    // console.log(item.url())
-    // let subPage = await item.page()
-
-  }
   
-  
-
-
-    //.screenshot({path: `example-${filename}.png`});
-
-
-    
-  // await page.type('form textarea', account);
-
-  // await page.waitForSelector('.btn-group');
-  // await page.click('.btn-group')
-
   await browser.close();
   
 }catch(e) {
@@ -130,3 +67,50 @@ const logined = true;
   }
 
 })();
+
+async function handlePage(browser, page, url) {
+  const ids = url.split("/").slice(-2)[0];
+  await page.goto(url);
+      
+  await page.waitForSelector('.receipt');
+  const originalText  = await page.evaluate( ()=>{
+        return document.querySelector('#original-text pre').innerText
+  });
+  if (!fs.existsSync(`./public/${ids}`)){
+    fs.mkdirSync(`./public/${ids}`);
+  }
+  fs.writeFileSync(`./public/${ids}/original.txt`,originalText);
+
+  const targetText = await page.evaluate( ()=>{
+    return document.querySelector('#target-text pre').innerText
+  });
+  fs.writeFileSync(`./public/${ids}/target.txt`, targetText);
+ 
+  await handleReceiptPage(browser, page, ids);
+}
+
+async function handleReceiptPage(browser, page, ids) {
+  await page.click('.receipt',{clickCount:4})
+  
+  await page.waitFor(500);
+
+  let pageList = await browser.pages();   
+  for(let i=0;i<pageList.length;i++) {
+    let subPage = pageList[i];
+    let SubTitle = await subPage.title();
+    let SubUrl = await subPage.url(); 
+    if(SubUrl.includes('receipt_job')){
+      await subPage.waitFor('.area-customer');
+      await subPage.evaluate(function() {
+        document.querySelector('textarea').value = ''
+      })
+
+      await subPage.type('textarea', account, {delay: 2})
+      await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
+      await subPage.click('#download-button')
+      await subPage.waitFor(5000);
+      await subPage.close();
+      //download-button
+    }
+  }
+}
