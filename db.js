@@ -5,11 +5,24 @@ db.serialize(function() {
     db.run("CREATE TABLE if not exists history (receipt_id TEXT, date DATE)");
 });
 
+async function checkIDNotExist(id) {
+    return new Promise( (resolve, reject) => {
+        db.get(`SELECT count(receipt_id) as count FROM history where receipt_id = ${id}`, function(err, row) {
+             if(err){console.error(err);reject(err);}
+             if(row.count>0) {
+                 reject("data exist");
+             }else {
+                 resolve("ok");
+             }
+         })
+       }); 
+}
+exports.checkIDNotExist = checkIDNotExist;
+
 async function insert(id) {
   return new Promise( (resolve, reject) => {
    db.get(`SELECT count(receipt_id) as count FROM history where receipt_id = ${id}`, function(err, row) {
         if(err){console.error(err);reject(err);}
-        console.log(row);
         if(row.count>0) {
             reject("data exist");
         }else {
@@ -36,7 +49,7 @@ async function getHistory() {
 }
 exports.getHistory = getHistory;
 //db.close();
-async function start(){
+async function test(){
         insert("111").then( (result)=> {
             console.log(result);    
         }, error => {console.error(error);});
@@ -48,4 +61,4 @@ async function start(){
         history = await getHistory();
         console.log(history);
 }
-start();
+// test();

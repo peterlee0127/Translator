@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const db = require('./db.js');
 
 const options = {
   'headless': false,  // no gui browser
@@ -55,7 +56,13 @@ const password = authInfo.password;
 
   for(let i=0;i<contextList.length;i++){
     let url = contextList[i];
-    await handlePage(browser, page, url);
+    const ids = url.split("/").slice(-2)[0];
+    try{
+      let result = await db.checkIDNotExist(ids)
+      await handlePage(browser, page, url);
+    }catch(error) {
+      console.error(`exists:${ids}`);
+    }
   }
   
   await page.goto('https://gengo.com/c/dashboard/');
@@ -109,7 +116,18 @@ async function handleReceiptPage(browser, page, ids) {
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
       await subPage.waitFor(5000);
+      let files = await fs.readdirSync(`./public/${ids}`);
+      if(files.length==3) {
+        // has original, target, receipt files.
+        try{
+          let result = await db.insert(ids)
+        }catch(error) {
+          console.error(`exists:${ids}`);
+        }
+      }
       await subPage.close();
+
+    
       //download-button
     }
   }
