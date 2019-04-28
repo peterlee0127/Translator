@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/peterlee0127/Translator#readme",
   "dependencies": {
+    "mailgun-js": "^0.22.0",
     "puppeteer": "^1.14.0",
     "sqlite3": "^4.0.6"
   }

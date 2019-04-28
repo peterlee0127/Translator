@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const db = require('./db.js');
+const mail = require('./mail.js')
 
 const options = {
   'headless': false,  // no gui browser
@@ -121,6 +122,7 @@ async function handleReceiptPage(browser, page, ids) {
         // has original, target, receipt files.
         try{
           let result = await db.insert(ids)
+          mail.sendMail(ids);
         }catch(error) {
           console.error(`exists:${ids}`);
         }

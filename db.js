@@ -1,4 +1,4 @@
-var sqlite3 = require('node-sqlite3').verbose();
+var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./db.sqlite3');
 
 db.serialize(function() {
