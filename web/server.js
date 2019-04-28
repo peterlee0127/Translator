@@ -25,8 +25,8 @@ app.use(async function (ctx) {
   }
   else if(ctx.path == "/create_job")  {
     let content = ctx.request.body.content;
-    translate.createJob(content);
-    ctx.redirect('/')
+    let result = await translate.createJob(content);
+    ctx.body = result;
   }
   else if(ctx.path == "/get_job")  {
     let query = ctx.request.query;

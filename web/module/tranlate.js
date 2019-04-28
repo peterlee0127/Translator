@@ -24,27 +24,31 @@ exports.getJob = getJob;
 // getJob('2979472')
 
 function createJob(content) {
-    let job1 = {
-        'slug': content,
-        'body_src': content,
-        'lc_src': 'zh-tw',
-        'lc_tgt': 'en',
-        'tier': 'standard',
-        'auto_approve': 1,
-        'custom_data': 'some custom data untouched by Gengo.',
-    };
-    let jobs = {
-        "jobs": {
-            'job1': job1,
+    return new Promise( (resolve,reject)=>{
+        let job1 = {
+            'slug': content,
+            'body_src': content,
+            'lc_src': 'zh-tw',
+            'lc_tgt': 'en',
+            'tier': 'standard',
+            'auto_approve': 1,
+            'custom_data': 'some custom data untouched by Gengo.',
+        };
+        let jobs = {
+            "jobs": {
+                'job1': job1,
+            }
         }
-    }
-    gengo.jobs.create(jobs, (error,response)=> {
-        if(error)  {
-            console.log(error);
-        }else{
-            console.log(response);
-        }
-    });
+        gengo.jobs.create(jobs, (error,response)=> {
+            if(error)  {
+                console.log(error);
+                resolve(error);
+            }else{
+                console.log(response);
+                resolve(response);
+            }
+        });
+    })
 }
 exports.createJob = createJob;
 

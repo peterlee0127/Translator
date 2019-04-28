@@ -4,10 +4,19 @@
             <div class="col-lg-6 col-sm-12">
                     <h1 class="cover-heading">Translator</h1>
                     <textarea class="form-control" name="content" form="textForm" rows="20" value=""></textarea><br>
-                    <form action="create_job" method="POST" id="textForm" role="form">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    <button onclick="create_job()" class="btn btn-primary">Submit</button>
             </div>
             <div class="col-lg-3"></div>
         </div>
+        <script>
+            function create_job(){ 
+                let value = document.querySelector('.form-control').value;
+                $.post( "/create_job", { content: value })
+                 .done(function( data ) {
+                    alert(data);
+                    document.querySelector('.form-control').value = "";
+                });
+            
+            }
+        </script>
 </div>
