@@ -87,12 +87,12 @@ async function handlePage(browser, page, url) {
   if (!fs.existsSync(`./public/${ids}`)){
     fs.mkdirSync(`./public/${ids}`);
   }
-  fs.writeFileSync(`./public/${ids}/original.txt`,originalText);
+  fs.writeFileSync(`./public/${ids}/chinese.txt`,originalText);
 
   const targetText = await page.evaluate( ()=>{
     return document.querySelector('#target-text pre').innerText
   });
-  fs.writeFileSync(`./public/${ids}/target.txt`, targetText);
+  fs.writeFileSync(`./public/${ids}/english.txt`, targetText);
  
   await handleReceiptPage(browser, page, ids);
 }
@@ -113,7 +113,8 @@ async function handleReceiptPage(browser, page, ids) {
         document.querySelector('textarea').value = ''
       })
 
-      await subPage.type('textarea', account, {delay: 2})
+      let typeInfo = '財團法人資訊工業策進會 10622 台北市大安區和平東路二段106號 11樓';
+      await subPage.type('textarea', typeInfo, {delay: 2})
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
       await subPage.waitFor(5000);

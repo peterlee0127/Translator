@@ -22,7 +22,7 @@ async function sendMail(ids) {
         from: 'PDIS Gengo <pdis@pdis.tw>',
         to: targets,
         subject: `PDIS Gengo 翻譯 - ${ids}`,
-        text: `最新的一篇翻譯 - ${ids}`,
+        text: `最新的一篇翻譯 - ${ids}\n\n${new Date().toString()}\n\n`,
         attachment: contents
     };
 
