@@ -13,7 +13,7 @@
                 let value = document.querySelector('.form-control').value;
                 $.post( "/create_job", { content: value })
                  .done(function( data ) {
-                    alert(data);
+                    alert(JSON.stringify(data));
                     document.querySelector('.form-control').value = "";
                 });
             
