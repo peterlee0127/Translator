@@ -4,7 +4,7 @@ const db = require('./db.js');
 const mail = require('./mail.js')
 
 const options = {
-  'headless': false,  // no gui browser
+  'headless': true,  // no gui browser
   'userDataDir':"./data" // save browser data,session,cookie
 };
 
@@ -25,7 +25,7 @@ const password = authInfo.password;
   browser.addListener('targetchanged',function(event){
   });
 
-  let firstPage = 'https://gengo.com/c/dashboard/'
+  let firstPage = 'https://gengo.com/c/dashboard/jobs/approved/'
   if(!logined) {
     firstPage = 'https://gengo.com/auth/form/login/';
   }
@@ -87,12 +87,12 @@ async function handlePage(browser, page, url) {
   if (!fs.existsSync(`./public/${ids}`)){
     fs.mkdirSync(`./public/${ids}`);
   }
-  fs.writeFileSync(`./public/${ids}/original.txt`,originalText);
+  fs.writeFileSync(`./public/${ids}/chinese.txt`,originalText);
 
   const targetText = await page.evaluate( ()=>{
     return document.querySelector('#target-text pre').innerText
   });
-  fs.writeFileSync(`./public/${ids}/target.txt`, targetText);
+  fs.writeFileSync(`./public/${ids}/english.txt`, targetText);
  
   await handleReceiptPage(browser, page, ids);
 }
@@ -113,12 +113,13 @@ async function handleReceiptPage(browser, page, ids) {
         document.querySelector('textarea').value = ''
       })
 
-      await subPage.type('textarea', account, {delay: 2})
+      let typeInfo = '財團法人資訊工業策進會 10622 台北市大安區和平東路二段106號 11樓';
+      await subPage.type('textarea', typeInfo, {delay: 2})
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
-      await subPage.waitFor(5000);
+      await subPage.waitFor(20000);
       let files = await fs.readdirSync(`./public/${ids}`);
-      if(files.length==3) {
+      if(files.length>=3) {
         // has original, target, receipt files.
         try{
           let result = await db.insert(ids)
@@ -126,7 +127,9 @@ async function handleReceiptPage(browser, page, ids) {
         }catch(error) {
           console.error(`exists:${ids}`);
         }
-      }
+      }else {
+ 	console.log(`${ids} folder is not 3 files`);
+	}
       await subPage.close();
 
     

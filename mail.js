@@ -18,18 +18,22 @@ async function sendMail(ids) {
         var attch = new mailgun.Attachment({data: content, filename: file});
         contents.push(attch);
     }
-    var data = {
-        from: 'PDIS Gengo <pdis@pdis.tw>',
-        to: targets,
-        subject: `PDIS Gengo 翻譯 - ${ids}`,
-        text: `最新的一篇翻譯 - ${ids}`,
-        attachment: contents
-    };
+    for(var i=0;i<targets.length;i++){
+        let target = targets[i];
+    	var data = {
+        	from: 'PDIS Gengo <pdis@pdis.tw>',
+        	to: target,
+        	subject: `PDIS Gengo 翻譯 - ${ids}`,
+        	text: `最新的一篇翻譯 - ${ids}\n\n${new Date().toString()}\n\n`,
+        	attachment: contents
+    	};
 
-        mailgun.messages().send(data, function (error, body) {
-            console.log(body);
-            if(error){reject();}else {resolve();}
-        });
+        	mailgun.messages().send(data, function (error, body) {
+            		console.log(body);
+            		if(error){reject();}else {resolve();}
+        	});
+	}        
+
     });
 }
 exports.sendMail = sendMail;
