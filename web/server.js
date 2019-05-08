@@ -6,6 +6,7 @@ const app = new Koa();
 
 app.use(bodyParser());
 app.use(require('koa-static')('public', {}));
+app.use(require('koa-static')('../public', {}));
 
 const translate = require('./module/tranlate.js');
 

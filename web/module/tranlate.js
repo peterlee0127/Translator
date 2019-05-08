@@ -2,8 +2,6 @@ const fs = require('fs');
 const config = JSON.parse(fs.readFileSync("./config.json","utf8"));
 const gengo = require('gengo')(config.publicKey, config.privateKey, config.sandbox);
 
-
-
 gengo.account.stats(function(error,response){
     if(error)  {
         console.log(error);
@@ -72,7 +70,20 @@ async function listJobs() {
         getJobList({ status: 'approved' }),
         getJobList({ status: 'pending' }),
         getJobList({ status: 'available' })
-    ])  
+    ]);
+    let ids = fs.readdirSync('../public');
+    for(let i=0;i<ids.length;i++)   {
+        let id = ids[i];
+        if(id!=".DS_Store") {
+            let files = fs.readdirSync(`../public/${id}`); 
+            for(let k=0;k<results[0].length;k++) {
+                if(results[0][k].job_id==id){
+                    results[0][k].files = files;
+                }
+            }
+          
+        }
+    }
     return results;
 }
 listJobs();

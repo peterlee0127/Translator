@@ -10,11 +10,19 @@
            <% let category = data[i]%>
            <% for(var j=0; j<category.length; j++) {%>
            <% let date = category[j].ctime*1000 %>
-          <p class="card-text">Time: <%= new Date(date).toString().split("GMT")[0] %>  Job ID: <%= category[j].job_id %>
-            <a href="#" id='<%= data[i].job_id %>' class="btn btn-success">Info</a>
-          </p>
-          <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
-          </form>
+          <p class="card-text"><%= new Date(date).toString().split("GMT")[0] %></p>
+          <p>Job ID: <%= category[j].job_id %></p>
+            <% if(category[j].files) { %>
+              <% let receiptURL = "/" + category[j].job_id + "/gengo_receipt.pdf" %>
+              <% let chFileURL = "/" + category[j].job_id + "/chinese.txt" %>
+              <% let enFileURL = "/" + category[j].job_id + "/english.txt" %>
+              <a href="<%= receiptURL %>" target="_blank" class="btn btn-info">Receipt</a>
+              <a href="<%= chFileURL %>" target="_blank" class="btn btn-info">Chinese</a>
+              <a href="<%= enFileURL %>" target="_blank" class="btn btn-info">English</a>
+            <% } %>
+          <!-- <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
+          </form> -->
+           <hr>
         <% } %>
       </div>
         <% } %>
