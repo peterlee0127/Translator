@@ -59,8 +59,8 @@ const password = authInfo.password;
     let url = contextList[i];
     const ids = url.split("/").slice(-2)[0];
     try{
-      let result = await db.checkIDNotExist(ids)
-      await handlePage(browser, page, url);
+        let result = await db.checkIDNotExist(ids)
+        await handlePage(browser, page, url);
     }catch(error) {
       console.error(`exists:${ids}`);
     }
@@ -79,26 +79,40 @@ const password = authInfo.password;
 async function handlePage(browser, page, url) {
   const ids = url.split("/").slice(-2)[0];
   await page.goto(url);
-      
-  await page.waitForSelector('.receipt');
-  const originalText  = await page.evaluate( ()=>{
-        return document.querySelector('#original-text pre').innerText
-  });
-  if (!fs.existsSync(`./public/${ids}`)){
-    fs.mkdirSync(`./public/${ids}`);
-  }
-  fs.writeFileSync(`./public/${ids}/chinese.txt`,originalText);
 
-  const targetText = await page.evaluate( ()=>{
-    return document.querySelector('#target-text pre').innerText
-  });
-  fs.writeFileSync(`./public/${ids}/english.txt`, targetText);
- 
-  await handleReceiptPage(browser, page, ids);
+  await page.waitForSelector('.receipt');
+  
+    /*
+    will crash chrome. BUG....
+    await page.waitForSelector('.ui_btn.primary_btn',{timeout:2000})
+    await page.click(".ui_btn.primary_btn");
+    await page.waitFor(8000);
+    
+    await page.click(".blue-box.clearfix .orange-link");
+    await page.waitFor(8000);
+    await handleReceiptPage(browser, page, ids);
+    */
+    try{
+      const originalText  = await page.evaluate( ()=>{
+        return document.querySelector('#original-text pre').innerText
+      });
+      if (!fs.existsSync(`./public/${ids}`)){
+        fs.mkdirSync(`./public/${ids}`);
+      }
+      fs.writeFileSync(`./public/${ids}/chinese.txt`,originalText);
+
+      const targetText = await page.evaluate( ()=>{
+        return document.querySelector('#target-text pre').innerText
+      });
+      fs.writeFileSync(`./public/${ids}/english.txt`,targetText);
+    } catch(e){
+      // console.log(e);
+    }
+    await handleReceiptPage(browser, page, ids);
 }
 
 async function handleReceiptPage(browser, page, ids) {
-  await page.click('.receipt',{clickCount:4})
+  await page.click('.receipt',{clickCount: 4})
   
   await page.waitFor(500);
 
@@ -117,9 +131,9 @@ async function handleReceiptPage(browser, page, ids) {
       await subPage.type('textarea', typeInfo, {delay: 2})
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
-      await subPage.waitFor(20000);
+      await subPage.waitFor(1000*10);
       let files = await fs.readdirSync(`./public/${ids}`);
-      if(files.length>=3) {
+      if(files.length>=1) {
         // has original, target, receipt files.
         try{
           let result = await db.insert(ids)
