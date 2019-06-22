@@ -1,5 +1,5 @@
 # Translator
-Translator
+Translator for PDIS. A web interface for gengo translate. With receipt and email notification.
 
 
 
@@ -32,7 +32,7 @@ pm2
 ```
 
 
-
+These project has two componentes. One is at /web for web(UI service, download history file). The other one is bot(get new receipt, files, send email notificaiton by checking it every three hour).
 
 
 Use bot.
@@ -77,13 +77,9 @@ pm2 start server.js
 
 # Current Arch
 
-1. Web Service at HGR
+Web service and Bot service at other VM at HGR.
 
-2. Bot service at other HGR VM.
-
-
-
-## For Bot
+# Config 
 
 ## example: config.json
 
@@ -92,7 +88,7 @@ pm2 start server.js
 ```json
 # at root folder.
 # config.json
-# account and password for gengo account
+# account and password for gengo account.
 # mailgunkey for mailgun service.
 # targets: a array for notification email list.
 
@@ -105,7 +101,7 @@ pm2 start server.js
 ```
 
 ```json
-# For Gengo Web Service
+# For Gengo Web Service.
 # Gengo API key.
 # web/config.json
 
