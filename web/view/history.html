@@ -14,17 +14,12 @@
           <p>Job ID: <%= category[j].job_id %></p>
           <% let files = category[j].files %>
           <% if(files) {%>
-              <% if(files.length==1) { %>
-                <% let receiptURL = "/" + category[j].job_id + "/gengo_receipt.pdf" %>
-                <a href="<%= receiptURL %>" target="_blank" class="btn btn-info">Receipt</a>
-              <% } %>
-              <% if(files.length>1) { %>
-                <% let receiptURL = "/" + category[j].job_id + "/gengo_receipt.pdf" %>
-                <% let chFileURL = "/" + category[j].job_id + "/chinese.txt" %>
-                <% let enFileURL = "/" + category[j].job_id + "/english.txt" %>
-                <a href="<%= receiptURL %>" target="_blank" class="btn btn-info">Receipt</a>
-                <a href="<%= chFileURL %>" target="_blank" class="btn btn-info">Chinese</a>
-                <a href="<%= enFileURL %>" target="_blank" class="btn btn-info">English</a>
+              <% if(files.length>0) { %>
+                <% for(var n=0; n<files.length; n++) {%>
+                    <% let fileURL = "/" + category[j].job_id + "/" +files[n] %>
+                    <% let fileName = files[n].split("-")[0] %>
+                    <a href="<%= fileURL %>" target="_blank" class="btn btn-info"><%=fileName%></a>
+                <% } %>
               <% } %>
           <% } %>
           <!-- <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">

@@ -74,8 +74,10 @@ async function listJobs() {
     let ids = fs.readdirSync('../public');
     for(let i=0;i<ids.length;i++)   {
         let id = ids[i];
-        if(id!=".DS_Store") {
-            let files = fs.readdirSync(`../public/${id}`); 
+        if(id!=".DS_Store") { //.DS_Store
+            let files = fs.readdirSync(`../public/${id}`).filter(function(value, index, arr){
+                return value != ".DS_Store";
+            });
             for(let k=0;k<results[0].length;k++) {
                 if(results[0][k].job_id==id){
                     results[0][k].files = files;

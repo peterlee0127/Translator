@@ -99,12 +99,12 @@ async function handlePage(browser, page, url) {
       if (!fs.existsSync(`./public/${ids}`)){
         fs.mkdirSync(`./public/${ids}`);
       }
-      fs.writeFileSync(`./public/${ids}/chinese.txt`,originalText);
+      fs.writeFileSync(`./public/${ids}/chinese-${ids}.txt`,originalText);
 
       const targetText = await page.evaluate( ()=>{
         return document.querySelector('#target-text pre').innerText
       });
-      fs.writeFileSync(`./public/${ids}/english.txt`,targetText);
+      fs.writeFileSync(`./public/${ids}/english-${ids}.txt`,targetText);
     } catch(e){
       // console.log(e);
     }
@@ -132,6 +132,7 @@ async function handleReceiptPage(browser, page, ids) {
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
       await subPage.waitFor(1000*10);
+      fs.renameSync(`./public/${ids}/gengo_receipt.pdf`,`./public/${ids}/gengo_receipt-${ids}.pdf`)
       let files = await fs.readdirSync(`./public/${ids}`);
       if(files.length>=1) {
         // has original, target, receipt files.
