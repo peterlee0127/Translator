@@ -9,11 +9,13 @@
                         <select class="form-control" id="source">
                         <option>zh-tw</option>
                         <option>en</option>
+                        <option>ja</option>
                         </select>
-                        <label for="destin">destination Lang</label>
+                        <label for="destin">destin Lang</label>
                         <select class="form-control" id="destin">
                         <option>en</option>
                         <option>zh-tw</option>
+                        <option>ja</option>
                         </select>
                      </div>
 
@@ -26,18 +28,18 @@
         </div>
         <script>
             function create_job(){ 
-                let value = document.querySelector('.form-control').value;
+                let content = document.querySelector('.form-control').value;
                 let sourceLang = document.querySelector('#source').value;
                 let destinLang = document.querySelector('#destin').value;   
                 if(sourceLang==destinLang) {
                     alert('sourceLang is same as destinLang');
                     return;
                 }
-                if(value==''){
-                    alert('value is not valid');
+                if(content==''){
+                    alert('content is not valid');
                     return;
                 }
-                $.post( "/create_job", { content: value, sourceLang: sourceLang, destinLang: destinLang })
+                $.post( "/create_job", { content: content, sourceLang: sourceLang, destinLang: destinLang })
                  .done(function( data ) {
                     alert(JSON.stringify(data));
                     document.querySelector('.form-control').value = "";
