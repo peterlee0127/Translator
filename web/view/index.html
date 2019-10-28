@@ -4,7 +4,22 @@
             <div class="col-lg-6 col-sm-12">
                     <h1 class="cover-heading">Translator</h1>
                     <textarea class="form-control" name="content" form="textForm" rows="20" value=""></textarea><br>
-                    <h4>Default: zh_tw -> en_US</h4>
+                    <div class="form-group">
+                        <label for="source">source Lang</label>
+                        <select class="form-control" id="source">
+                        <option>zh-tw</option>
+                        <option>en</option>
+                        </select>
+                        <label for="destin">destination Lang</label>
+                        <select class="form-control" id="destin">
+                        <option>en</option>
+                        <option>zh-tw</option>
+                        </select>
+                     </div>
+
+
+
+
                     <button onclick="create_job()" class="btn btn-primary">Submit</button>
             </div>
             <div class="col-lg-3"></div>
@@ -12,7 +27,17 @@
         <script>
             function create_job(){ 
                 let value = document.querySelector('.form-control').value;
-                $.post( "/create_job", { content: value })
+                let sourceLang = document.querySelector('#source').value;
+                let destinLang = document.querySelector('#destin').value;   
+                if(sourceLang==destinLang) {
+                    alert('sourceLang is same as destinLang');
+                    return;
+                }
+                if(value==''){
+                    alert('value is not valid');
+                    return;
+                }
+                $.post( "/create_job", { content: value, sourceLang: sourceLang, destinLang: destinLang })
                  .done(function( data ) {
                     alert(JSON.stringify(data));
                     document.querySelector('.form-control').value = "";

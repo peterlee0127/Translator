@@ -25,8 +25,8 @@ app.use(async function (ctx) {
     await ctx.render('history', { data: jobs });
   }
   else if(ctx.path == "/create_job")  {
-    let content = ctx.request.body.content;
-    let result = await translate.createJob(content);
+    let body = ctx.request.body;
+    let result = await translate.createJob(body);
     ctx.body = result;
   }
   else if(ctx.path == "/get_job")  {

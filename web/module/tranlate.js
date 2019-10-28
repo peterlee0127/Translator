@@ -21,13 +21,17 @@ function getJob(jobId) {
 exports.getJob = getJob;
 // getJob('2979472')
 
-function createJob(content) {
+function createJob(body) {
     return new Promise( (resolve,reject)=>{
+        const content = body.content;
+        const sourceLang = body.sourceLang;
+        const destinLang = body.destinLang;
+        if(!content || !sourceLang || !destinLang) {console.log('some value is invalid');return;}
         let job1 = {
             'slug': content,
             'body_src': content,
-            'lc_src': 'zh-tw',
-            'lc_tgt': 'en',
+            'lc_src': sourceLang,
+            'lc_tgt': destinLang,
             'tier': 'standard',
             'auto_approve': 1,
             'custom_data': 'some custom data untouched by Gengo.',
