@@ -11,8 +11,8 @@
                         <option>en</option>
                         <option>ja</option>
                         </select>
-                        <label for="destin">destin Lang</label>
-                        <select class="form-control" id="destin">
+                        <label for="target">target Lang</label>
+                        <select class="form-control" id="target">
                         <option>en</option>
                         <option>zh-tw</option>
                         <option>ja</option>
@@ -30,16 +30,16 @@
             function create_job(){ 
                 let content = document.querySelector('.form-control').value;
                 let sourceLang = document.querySelector('#source').value;
-                let destinLang = document.querySelector('#destin').value;   
-                if(sourceLang==destinLang) {
-                    alert('sourceLang is same as destinLang');
+                let targetLang = document.querySelector('#target').value;   
+                if(sourceLang==targetLang) {
+                    alert('source Lang is same as target Lang');
                     return;
                 }
                 if(content==''){
                     alert('content is not valid');
                     return;
                 }
-                $.post( "/create_job", { content: content, sourceLang: sourceLang, destinLang: destinLang })
+                $.post( "/create_job", { content: content, sourceLang: sourceLang, targetLang: targetLang })
                  .done(function( data ) {
                     alert(JSON.stringify(data));
                     document.querySelector('.form-control').value = "";
