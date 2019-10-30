@@ -96,17 +96,23 @@ async function handlePage(browser, page, url) {
       const originalText  = await page.evaluate( ()=>{
         return document.querySelector('#original-text pre').innerText
       });
+      const originalLang  = await page.evaluate( ()=>{
+        return document.querySelector('.original-lang').innerText.toLowerCase().replace(/[^a-zA-Z ]/g, "");
+      })
       if (!fs.existsSync(`./public/${ids}`)){
         fs.mkdirSync(`./public/${ids}`);
       }
-      fs.writeFileSync(`./public/${ids}/chinese-${ids}.txt`,originalText);
+      fs.writeFileSync(`./public/${ids}/${originalLang}-${ids}.txt`,originalText);
 
+      const targetLang  = await page.evaluate( ()=>{
+        return document.querySelector('.target-lang').innerText.toLowerCase().replace(/[^a-zA-Z ]/g, "");
+      })
       const targetText = await page.evaluate( ()=>{
         return document.querySelector('#target-text pre').innerText
       });
-      fs.writeFileSync(`./public/${ids}/english-${ids}.txt`,targetText);
+      fs.writeFileSync(`./public/${ids}/${targetLang}-${ids}.txt`,targetText);
     } catch(e){
-      // console.log(e);
+      console.log(e);
     }
     await handleReceiptPage(browser, page, ids);
 }
