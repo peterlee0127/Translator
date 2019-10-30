@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const db = require('./db.js');
 const mail = require('./mail.js')
+const noti = require('./noti.js');
 
 const options = {
   'headless': true,  // no gui browser
@@ -145,6 +146,9 @@ async function handleReceiptPage(browser, page, ids) {
         try{
           let result = await db.insert(ids)
           mail.sendMail(ids);
+          noti.sendMessage({
+  	    title: `PDIS Gengo 翻譯 - ${ids}`;
+	  });
         }catch(error) {
           console.error(`exists:${ids}`);
         }
