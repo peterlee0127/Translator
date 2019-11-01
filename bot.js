@@ -146,8 +146,9 @@ async function handleReceiptPage(browser, page, ids) {
         try{
           let result = await db.insert(ids)
           mail.sendMail(ids);
+          const title = `PDIS Gengo 翻譯 - ${ids}`;
           noti.sendMessage({
-  	    title: `PDIS Gengo 翻譯 - ${ids}`;
+		title: title
 	  });
         }catch(error) {
           console.error(`exists:${ids}`);
