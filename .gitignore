@@ -3,3 +3,5 @@ config.json
 *.sqlite3
 data
 public
+config.txt
+key.js

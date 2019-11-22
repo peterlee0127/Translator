@@ -3,6 +3,7 @@ const fs = require('fs');
 const db = require('./db.js');
 const mail = require('./mail.js')
 const noti = require('./noti.js');
+const key = require('./key');
 
 const options = {
   'headless': true,  // no gui browser
@@ -13,7 +14,7 @@ const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
 const logined = true;
 
 const account = authInfo.account;
-const password = authInfo.password;
+const password = key.decrypt(authInfo.password);
 
 (async () => {
   try{
