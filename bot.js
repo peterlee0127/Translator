@@ -3,6 +3,7 @@ const fs = require('fs');
 const db = require('./db.js');
 const mail = require('./mail.js')
 const noti = require('./noti.js');
+const key = require('./key');
 
 const options = {
   'headless': true,  // no gui browser
@@ -13,7 +14,7 @@ const authInfo = JSON.parse(fs.readFileSync('./config.json','utf8'));
 const logined = true;
 
 const account = authInfo.account;
-const password = authInfo.password;
+const password = key.decrypt(authInfo.password);
 
 (async () => {
   try{
@@ -21,7 +22,7 @@ const password = authInfo.password;
   const page = await browser.newPage();
 
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36');
-  await page.setViewport({ width: 1280, height: 800 })
+  await page.setViewport({ width: 1280, height: 400 })
 
   browser.addListener('targetchanged',function(event){
   });
