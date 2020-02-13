@@ -16,14 +16,13 @@
           <% if(files) {%>
               <% if(files.length>0) { %>
                 <% for(var n=0; n<files.length; n++) {%>
-                    <% let fileURL = "/" + category[j].job_id + "/" +files[n] %>
-                    <% let fileName = files[n].split("-")[0] %>
+                    <% let fileURL = "/" + category[j].job_id + "/" +files[n].name %>
+                    <% let fileName = files[n].name.split("-")[0] %>
                     <a href="<%= fileURL %>" target="_blank" class="btn btn-info"><%=fileName%></a>
+                    <p><%= files[n].content %></p>
                 <% } %>
               <% } %>
           <% } %>
-          <!-- <form action="/get_job" method="GET" class="navbar-form navbar-right" role="form">
-          </form> -->
            <hr>
         <% } %>
       </div>

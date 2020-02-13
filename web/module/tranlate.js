@@ -66,7 +66,7 @@ function getJobList(job_query) {
 }
 
 async function listJobs() {
-    //queued,available,approved,reviewable,pending,revising,canceled
+    //  queued,available,approved,reviewable,pending,revising,canceled
     // { status: 'approved' }
     // {status: 'pending' }
     // {status: 'available' }
@@ -79,12 +79,22 @@ async function listJobs() {
     for(let i=0;i<ids.length;i++)   {
         let id = ids[i];
         if(id!=".DS_Store") { //.DS_Store
-            let files = fs.readdirSync(`../public/${id}`).filter(function(value, index, arr){
-                return value != ".DS_Store";
+            let files = fs.readdirSync(`../public/${id}`).filter(function(filename, index, arr){
+                return filename != ".DS_Store";
             });
+            
             for(let k=0;k<results[0].length;k++) {
                 if(results[0][k].job_id==id){
-                    results[0][k].files = files;
+                    results[0][k].files = [];
+                    files.forEach( file=> {
+            
+                        let content = fs.readFileSync(`../public/${id}/${file}`, 'utf8').substr(0, 50);
+                        if(!file.includes('.txt')) { content = '';}
+                        results[0][k].files.push({
+                            'name': file,
+                            'content': content
+                        });
+                    });
                 }
             }
           
