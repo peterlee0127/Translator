@@ -19,10 +19,12 @@ render(app, {
 });
 
 app.use(async function (ctx) {
-  const users = [{ name: 'Dead Horse' }, { name: 'Jack' }, { name: 'Tom' }];
   if(ctx.path=="/history") {
+    await ctx.render('history');
+    
+  }else if(ctx.path=="/get_history") {
     let jobs = await translate.listJobs();
-    await ctx.render('history', { data: jobs });
+    ctx.body = jobs;
   }
   else if(ctx.path == "/create_job")  {
     let body = ctx.request.body;
@@ -31,14 +33,10 @@ app.use(async function (ctx) {
   }
   else if(ctx.path == "/get_job")  {
     let query = ctx.request.query;
-    console.log(query);
     let jobid = query.jobId;
     let jobInfo = await translate.getJob(content);
-    console.log(jobInfo)
   }else {
-    //createJob
-    // translate.createJob();
-    await ctx.render('index', { users }); 
+    await ctx.render('index'); 
   }
 });
 

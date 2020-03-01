@@ -92,7 +92,8 @@ async function listJobs() {
                         if(!file.includes('.txt')) { content = '';}
                         results[0][k].files.push({
                             'name': file,
-                            'content': content
+                            'content': content,
+                            'href': `/${id}/${file}`,
                         });
                     });
                 }

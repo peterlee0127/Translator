@@ -1,33 +1,35 @@
 <div class="container">
-    <div class="row">
+    
+    <div id="loading"><h3>Loading....<h3></div>
+    <div class="row" id="history" style="display:none">
         <div class="col-lg-3"></div>
         <div class="col-lg-6 col-sm-12">
-        <div class="card">
-        <% let header = ["approved","pending","waiting"] %>
-        <% for(var i=0; i<data.length; i++) {%>
-        <h5 class="card-header"><%= header[i] %></h5>
-        <div class="card-body">
-           <% let category = data[i]%>
-           <% for(var j=0; j<category.length; j++) {%>
-           <% let date = category[j].ctime*1000 %>
-          <p class="card-text"><%= new Date(date).toString().split("GMT")[0] %></p>
-          <p>Job ID: <%= category[j].job_id %></p>
-          <% let files = category[j].files %>
-          <% if(files) {%>
-              <% if(files.length>0) { %>
-                <% for(var n=0; n<files.length; n++) {%>
-                    <% let fileURL = "/" + category[j].job_id + "/" +files[n].name %>
-                    <% let fileName = files[n].name.split("-")[0] %>
-                    <a href="<%= fileURL %>" target="_blank" class="btn btn-info"><%=fileName%></a>
-                    <p><%= files[n].content %></p>
-                <% } %>
-              <% } %>
-          <% } %>
-           <hr>
-        <% } %>
-      </div>
-        <% } %>
-     </div>
+            <div class="card">
+            <div v-for="(header, header_index) in headers">
+            <h5 class="card-header">{{ header }}</h5>
+                <div class="card-body"> 
+                    <div v-for="(history, history_index) in historys[header_index]">
+                        <p class="card-text">{{ new Date(history.ctime*1000).toString().split("GMT")[0] }}</p>
+                        <p>Job ID: {{ history.job_id }}</p>
+                            <div v-for="(file, file_index) in history.files">
+                                <div v-if="file.name">
+                                    <a v-bind:href="file.href" target="_blank" class="btn btn-info"> 
+                                        {{ file.name.split("-")[0] }}
+                                    </a>
+                                    <p>
+                                        {{ file.content }}
+                                    </p>
+                                </div>
+                              
+                            </div>
+                            <hr>
+                    </div>
+                   
+                </div>
+            </div> <!-- end v-for -->
+            </div> 
+        
+        </div>
      <div class="col-lg-3"></div>
     </div>
 </div>
@@ -36,3 +38,21 @@ body .card{
     color: black;
 }
 </style>
+<script type="text/javascript">
+    window.onload = load;
+    function load() {
+        $.get( "/get_history", function( data ) {
+            document.querySelector('#history').setAttribute('style', 'display');
+            document.querySelector('#loading').setAttribute('style', 'display:none');
+            var history_table = new Vue({
+                el: '#history',
+                data: {
+                    headers: ["approved","pending","waiting"],
+                    historys: data,
+                }
+            })
+        });
+    };
+
+
+</script>
