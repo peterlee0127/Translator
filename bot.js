@@ -22,7 +22,7 @@ const password = key.decrypt(authInfo.password);
   const page = await browser.newPage();
 
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36');
-  await page.setViewport({ width: 1280, height: 800 })
+  await page.setViewport({ width: 1280, height: 400 })
 
   browser.addListener('targetchanged',function(event){
   });
