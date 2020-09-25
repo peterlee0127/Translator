@@ -149,8 +149,9 @@ async function handleReceiptPage(browser, page, ids) {
           mail.sendMail(ids);
           const title = `PDIS Gengo 翻譯 - ${ids}`;
           noti.sendMessage({
-		title: title
-	  });
+            title: title,
+            id: ids
+	        });
         }catch(error) {
           console.error(`exists:${ids}`);
         }
