@@ -9,11 +9,13 @@
             <h5 class="card-header">{{ header }}</h5>
                 <div class="card-body"> 
                     <div v-for="(history, history_index) in historys[header_index]" v-bind:id="history.job_id">
+                        <p>
+                            <a v-bind:href="'#'+history.job_id">Job ID: {{ history.job_id }}</a>
+                        </p>
                         <p class="card-text">{{ new Date(history.ctime*1000).toString().split("GMT")[0] }}</p>
-                        <p>Job ID: {{ history.job_id }}</p>
                             <div v-for="(file, file_index) in history.files">
                                 <div v-if="file.name">
-                                    <p>
+                                    <p style="text-align: left;">
                                         {{ file.content }}
                                     </p>
                                     <a v-bind:href="file.href" target="_blank" class="btn btn-info"> 
