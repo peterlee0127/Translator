@@ -53,7 +53,12 @@ body .card{
                     historys: data,
                 }
             })
+            var urlHash = window.location.hash;
+            urlHash = urlHash.replace("#","");
+            document.getElementById(urlHash).scrollIntoView();
+            document.getElementById(urlHash).style["background-color"]="#cce6ff"
         });
+
     };
 
 
