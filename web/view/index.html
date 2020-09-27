@@ -26,6 +26,7 @@
         </div>
         <script>
             function create_job(){ 
+              
                 let content = document.querySelector('.form-control').value;
                 let sourceLang = document.querySelector('#source').value;
                 let targetLang = document.querySelector('#target').value;   
@@ -37,10 +38,17 @@
                     alert('content is not valid');
                     return;
                 }
+                document.querySelector(".btn-primary").disabled = true
                 $.post( "/create_job", { content: content, sourceLang: sourceLang, targetLang: targetLang })
                  .done(function( data ) {
                     alert(JSON.stringify(data));
                     document.querySelector('.form-control').value = "";
+                
+                }).fail(function() {
+                    alert( "error" );
+                })
+                .always(function() {
+                    document.querySelector(".btn-primary").disabled = false;
                 });
             
             }
