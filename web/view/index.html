@@ -31,21 +31,23 @@
                 let sourceLang = document.querySelector('#source').value;
                 let targetLang = document.querySelector('#target').value;   
                 if(sourceLang==targetLang) {
-                    alert('source Lang is same as target Lang');
+                    alert('source language is same as target language. 來源和目的的語言相同，請設定語言');
                     return;
                 }
                 if(content==''){
-                    alert('content is not valid');
+                    alert('content is not valid. 內文發生問題，請檢查內文');
                     return;
                 }
                 document.querySelector(".btn-primary").disabled = true
                 $.post( "/create_job", { content: content, sourceLang: sourceLang, targetLang: targetLang })
                  .done(function( data ) {
-                    alert(JSON.stringify(data));
+                    var message = JSON.stringify(data);
+                    message = "翻譯已送出"+message;
+                    alert(message);
                     document.querySelector('.form-control').value = "";
                 
                 }).fail(function() {
-                    alert( "error" );
+                    alert("發生錯誤 error");
                 })
                 .always(function() {
                     document.querySelector(".btn-primary").disabled = false;
