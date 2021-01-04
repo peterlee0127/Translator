@@ -135,7 +135,8 @@ async function handleReceiptPage(browser, page, ids) {
         document.querySelector('textarea').value = ''
       })
 
-      let typeInfo = '財團法人資訊工業策進會 10622 台北市大安區和平東路二段106號 11樓';
+      //let typeInfo = '財團法人資訊工業策進會 10622 台北市大安區和平東路二段106號 11樓';
+      let typeInfo = '行政院 100009臺北市中正區忠孝東路1段1號'
       await subPage.type('textarea', typeInfo, {delay: 2})
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
