@@ -83,7 +83,9 @@ async function handlePage(browser, page, url) {
   await page.goto(url);
 
   await page.waitForSelector('.receipt');
-  
+
+  await page.waitFor(2000);
+
     /*
     will crash chrome. BUG....
     await page.waitForSelector('.ui_btn.primary_btn',{timeout:2000})
@@ -116,13 +118,18 @@ async function handlePage(browser, page, url) {
     } catch(e){
       console.log(e);
     }
+
+    await page.waitFor(4000);
+
     await handleReceiptPage(browser, page, ids);
+
+  
 }
 
 async function handleReceiptPage(browser, page, ids) {
   await page.click('.receipt',{clickCount: 4})
   
-  await page.waitFor(500);
+  await page.waitFor(1000);
 
   let pageList = await browser.pages();   
   for(let i=0;i<pageList.length;i++) {
@@ -157,7 +164,7 @@ async function handleReceiptPage(browser, page, ids) {
           console.error(`exists:${ids}`);
         }
       }else {
- 	console.log(`${ids} folder is not 3 files`);
+ 	  console.log(`${ids} folder is not 3 files`);
 	}
       await subPage.close();
 
