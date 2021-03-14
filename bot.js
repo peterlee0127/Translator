@@ -152,7 +152,7 @@ async function handleReceiptPage(browser, page, ids) {
       await subPage.type('textarea', typeInfo, {delay: 2})
       await subPage._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: `./public/${ids}`});
       await subPage.click('#download-button')
-      await subPage.waitFor(1000*10);
+      await subPage.waitFor(1000*20);
       fs.renameSync(`./public/${ids}/gengo_receipt.pdf`,`./public/${ids}/gengo_receipt-${ids}.pdf`)
       let files = await fs.readdirSync(`./public/${ids}`);
       if(files.length>=1) {
