@@ -75,31 +75,42 @@ async function listJobs() {
         getJobList({ status: 'pending', count: 100}),
         getJobList({ status: 'available', count: 100 })
     ]);
-    let ids = fs.readdirSync('../public');
+    let listDict = {};
+    for(let k=0;k<results[0].length;k++) {
+        let jobId = results[0][k].job_id;
+        let createTime = results[0][k].ctime;
+        listDict[jobId] = {
+            'ctime': createTime
+        }
+    }
+    let ids = fs.readdirSync('../public').filter(id=> id != ".DS_Store");
     for(let i=0;i<ids.length;i++)   {
         let id = ids[i];
-        if(id!=".DS_Store") { //.DS_Store
             let files = fs.readdirSync(`../public/${id}`).filter(function(filename, index, arr){
                 return filename != ".DS_Store";
             });
-            
-            for(let k=0;k<results[0].length;k++) {
+            listDict[id].file = {};
+            listDict[id].file = files;
+            listDict[id].files = [];
+            files.forEach( file=> {
+                let content = '';
+                if(file.includes('.txt')) { 
+                    content = fs.readFileSync(`../public/${id}/${file}`, 'utf8').substr(0, 100);
+                }
+                listDict[id].files.push({
+                    'name': file,
+                    'content': content,
+                    'href': `/${id}/${file}`,
+                });
+            });
+           /*
+           for(let k=0;k<results[0].length;k++) {
                 if(results[0][k].job_id==id){
                     results[0][k].files = [];
-                    files.forEach( file=> {
-            
-                        let content = fs.readFileSync(`../public/${id}/${file}`, 'utf8').substr(0, 100);
-                        if(!file.includes('.txt')) { content = '';}
-                        results[0][k].files.push({
-                            'name': file,
-                            'content': content,
-                            'href': `/${id}/${file}`,
-                        });
-                    });
-                }
-            }
+                                 }
           
-        }
+            }
+            */
     }
     return results;
 }
