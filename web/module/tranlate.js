@@ -87,9 +87,11 @@ async function listJobs() {
                 if(results[0][k].job_id==id){
                     results[0][k].files = [];
                     files.forEach( file=> {
+                        let content = '';
+                        if(file.includes('.txt')) { 
+                            content = fs.readFileSync(`../public/${id}/${file}`, 'utf8').substr(0, 100);
+                        }
             
-                        let content = fs.readFileSync(`../public/${id}/${file}`, 'utf8').substr(0, 100);
-                        if(!file.includes('.txt')) { content = '';}
                         results[0][k].files.push({
                             'name': file,
                             'content': content,
