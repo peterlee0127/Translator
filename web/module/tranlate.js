@@ -71,8 +71,8 @@ async function listJobs() {
     // {status: 'pending' }
     // {status: 'available' }
     let results = await Promise.all([
-        getJobList({ status: 'approved', count: 100}),
         getJobList({ status: 'pending', count: 100}),
+        getJobList({ status: 'approved', count: 100}),
         getJobList({ status: 'available', count: 100 })
     ]);
     let ids = fs.readdirSync('../public');
