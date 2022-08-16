@@ -83,16 +83,16 @@ async function listJobs() {
                 return filename != ".DS_Store";
             });
             
-            for(let k=0;k<results[0].length;k++) {
-                if(results[0][k].job_id==id){
-                    results[0][k].files = [];
+            for(let k=0;k<results[1].length;k++) {
+                if(results[1][k].job_id==id){
+                    results[1][k].files = [];
                     files.forEach( file=> {
                         let content = '';
                         if(file.includes('.txt')) { 
                             content = fs.readFileSync(`../public/${id}/${file}`, 'utf8').substr(0, 100);
                         }
             
-                        results[0][k].files.push({
+                        results[1][k].files.push({
                             'name': file,
                             'content': content,
                             'href': `/${id}/${file}`,
